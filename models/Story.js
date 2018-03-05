@@ -28,7 +28,7 @@ const StorySchema = new Schema({
             type: Date,
             default: Date.now
         },
-        commnetUser: {
+        commentUser: {
             type: Schema.Types.ObjectId,
             ref: 'users'
         }
