@@ -19,6 +19,7 @@ router.get('/show/:id', (req, res) => {
         _id: req.params.id
     })
     .populate('user')
+    .populate('comments.commentUser')
     .then(story => {
         res.render('stories/show', {story:story});
     });
@@ -89,6 +90,25 @@ router.delete('/:id', (req, res) => {
     .then(() => {
         res.redirect('/dashboard');
     });
+});
+
+router.post('/comment/:id', (req, res) => {
+  Story.findOne({
+      _id: req.params.id
+  })
+  .then(story => {
+      const newComment = {
+          commentBody: req.body.commentBody,
+          commnetUser: req.user.id
+      }
+
+      story.comments.unshift(newComment);
+
+      story.save()
+       .then(story => {
+           res.redirect(`/stories/show/${story.id}`);
+       });
+  })
 });
 
 module.exports = router;
